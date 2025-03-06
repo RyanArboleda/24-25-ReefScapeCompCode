@@ -5,30 +5,46 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Configs.HangMotorConfigurations;
 
 public class hangSub extends SubsystemBase {
   /** Creates a new hangSub. */
-  TalonFX leftHangMotor,rightHangMotor;
+  SparkMax leftHangMotor,rightHangMotor;
 
   public hangSub() {
 
-  leftHangMotor = new TalonFX(Constants.leftHang);
-  rightHangMotor = new TalonFX(Constants.rightHang);
+  leftHangMotor = new SparkMax(Constants.leftHang, MotorType.kBrushless);
+  rightHangMotor = new SparkMax(Constants.rightHang, MotorType.kBrushless);
+
+  leftHangMotor.configure(
+  HangMotorConfigurations.leftHangConfig, 
+  ResetMode.kResetSafeParameters, 
+  PersistMode.kPersistParameters);
+
+  rightHangMotor.configure(
+  HangMotorConfigurations.rightHangConfig, 
+  ResetMode.kResetSafeParameters, 
+  PersistMode.kPersistParameters);
 
   }
 
 
   public void hangUp(){
-    leftHangMotor.set(100);
-    rightHangMotor.set(100);
+    leftHangMotor.set(1.00);
+    rightHangMotor.set(1.00);
   }
 
   public void hangDown(){
-    leftHangMotor.set(-100);
-    rightHangMotor.set(-100);
+    leftHangMotor.set(-1.00);
+    rightHangMotor.set(-1.00);
   }
 
   public void hangStop(){

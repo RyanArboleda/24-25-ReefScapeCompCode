@@ -15,6 +15,7 @@ public class Constants {
     public static int coralRollers = 6;
     public static int algaeArm = 7;
     public static int algaeRollers = 8;
+    public static double percentSlow = 0.35;
 
     public static class elevatorSetpoints{
         public static int CoralStation = 0;

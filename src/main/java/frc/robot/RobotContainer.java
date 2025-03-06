@@ -19,16 +19,19 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-
+import frc.robot.commands.CoralLvl3Command;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.coralSub;
+import frc.robot.subsystems.hangSub;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
-
+    private double percentSlow = 1;
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
@@ -46,10 +49,18 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
+    public static coralSub mCoralSub = new coralSub();
+
+    public static hangSub mHangSub = new hangSub();
+
+
     /* Path follower */
     private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser();
 
     public RobotContainer() {
+
+        NamedCommands.registerCommand("Coral LVL 3", new CoralLvl3Command());
+
  
         autoChooser.setDefaultOption("OurTestAuto", new PathPlannerAuto("OurTestAuto"));
         // autoChooser = AutoBuilder.buildAutoChooser("OurTestAuto");
@@ -67,6 +78,7 @@ public class RobotContainer {
     
          SmartDashboard.putData("Medium Test Auto", autoChooser);
 
+
         configureBindings();
     }
 
@@ -76,9 +88,9 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(-filterY.calculate(joystick.getLeftY()) * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-filterX.calculate(joystick.getLeftX()) * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left) // This was negative before but I made it positive to make it turn the right direction
+                drive.withVelocityX(-filterY.calculate(joystick.getLeftY()) * MaxSpeed * percentSlow) // Drive forward with negative Y (forward)
+                    .withVelocityY(-filterX.calculate(joystick.getLeftX()) * MaxSpeed * percentSlow) // Drive left with negative X (left)
+                    .withRotationalRate(joystick.getRightX() * MaxAngularRate * percentSlow) // Drive counterclockwise with negative X (left) // This was negative before but I made it positive to make it turn the right direction
             )
         );
 
@@ -104,7 +116,11 @@ public class RobotContainer {
         // reset the field-centric heading on left bumper press
         joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
+        joystick.x().toggleOnTrue(new InstantCommand(() -> slow()));
+
         drivetrain.registerTelemetry(logger::telemeterize);
+
+        
     }
 
     public Command getAutonomousCommand() {
@@ -112,4 +128,14 @@ public class RobotContainer {
         
         return autoChooser.getSelected();
     }
-}
+
+    public void slow(){
+        if(percentSlow == 1){
+            percentSlow = Constants.percentSlow;
+        }
+
+        else{
+            percentSlow = 1;
+        }
+    }
+}   

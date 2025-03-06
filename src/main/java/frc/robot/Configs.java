@@ -25,6 +25,11 @@ public class Configs {
             //limit switch
             leftElevatorConfig.limitSwitch.reverseLimitSwitchEnabled(true).reverseLimitSwitchType(Type.kNormallyOpen);
             rightElevatorConfig.limitSwitch.reverseLimitSwitchEnabled(true).reverseLimitSwitchType(Type.kNormallyOpen);
+
+            
+            leftElevatorConfig.follow(Constants.rightElevator, true);
+            rightElevatorConfig.inverted(false);
+            
             
             //same thing as a long line of code btw
             //closed loop controller
@@ -68,5 +73,14 @@ public class Configs {
 
         }
         
+    }
+
+    public static final class HangMotorConfigurations{
+        public static final SparkMaxConfig leftHangConfig = new SparkMaxConfig();
+        public static final SparkMaxConfig rightHangConfig = new SparkMaxConfig();
+static{
+        leftHangConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(60).voltageCompensation(12);
+        rightHangConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(60).voltageCompensation(12);
+        }
     }
 }
