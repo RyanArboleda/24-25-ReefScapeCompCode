@@ -23,6 +23,7 @@ public class hangSub extends SubsystemBase {
 
   leftHangMotor = new SparkMax(Constants.leftHang, MotorType.kBrushless);
   rightHangMotor = new SparkMax(Constants.rightHang, MotorType.kBrushless);
+  
 
   leftHangMotor.configure(
   HangMotorConfigurations.leftHangConfig, 
@@ -36,20 +37,20 @@ public class hangSub extends SubsystemBase {
 
   }
 
-
+  public void hangSetPower(double power){
+    leftHangMotor.set(power);
+  }
+  
   public void hangUp(){
-    leftHangMotor.set(1.00);
-    rightHangMotor.set(1.00);
+    leftHangMotor.set(1);
   }
 
   public void hangDown(){
-    leftHangMotor.set(-1.00);
-    rightHangMotor.set(-1.00);
+    leftHangMotor.set(-1);
   }
 
   public void hangStop(){
     leftHangMotor.set(0);
-    rightHangMotor.set(0);
   }
 
   @Override

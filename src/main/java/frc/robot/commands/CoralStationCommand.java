@@ -7,6 +7,7 @@ package frc.robot.commands;
 import com.pathplanner.lib.config.RobotConfig;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -26,16 +27,23 @@ public class CoralStationCommand extends Command {
   @Override
   public void execute() {
     RobotContainer.mCoralSub.moveToSetpointCoralStation();
-    RobotContainer.mCoralSub.moveToSetpointWristCoralStation();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    RobotContainer.mCoralSub.elevatorStop();
+
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if(RobotContainer.mCoralSub.getElevatorRelEncoder() <= Constants.elevatorSetpoints.CoralStation - 0.1){
+      return true;
+    }
+    else{ 
     return false;
+    }
   }
 }

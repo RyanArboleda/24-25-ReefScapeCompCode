@@ -4,11 +4,14 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class CoralLvl3Command extends Command {
+  Timer timer;
   /** Creates a new CoralLvl3Command. */
   public CoralLvl3Command() {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -17,22 +20,31 @@ public class CoralLvl3Command extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    timer = new Timer();
+    timer.reset();
+    timer.start();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     RobotContainer.mCoralSub.moveToSetpointLevelThree();
-    RobotContainer.mCoralSub.moveToSetpointWristLevelTwoAndThree();
+    //RobotContainer.mCoralSub.moveToSetpointWristLevelTwoAndThree();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    RobotContainer.mCoralSub.elevatorStop();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if(RobotContainer.mCoralSub.getElevatorRelEncoder() >= Constants.elevatorSetpoints.lvl3 - 0.5){
+      return true;
+    }
+        return false;
   }
 }

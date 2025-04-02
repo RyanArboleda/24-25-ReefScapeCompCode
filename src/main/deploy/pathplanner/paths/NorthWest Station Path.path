@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.788114754098361,
-        "y": 5.151844262295082
+        "x": 3.7236019736842105,
+        "y": 5.093009868421053
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.5773565573770494,
-        "y": 6.206762295081967
+        "x": 2.512843776962899,
+        "y": 6.147927901207938
       },
       "isLocked": false,
       "linkedName": null
@@ -45,7 +45,7 @@
     "rotation": 125.8376529542783
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Comp Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -57.587693381648805
